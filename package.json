@@ -1,0 +1,27 @@
+{
+  "name": "gamenight",
+  "version": "0.0.1",
+  "description": "🕹 SDK for developing games for the GAMENIGHT platform",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha $(find . -name 'test_*.js')"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danbovey/GAMENIGHT-sdk.git"
+  },
+  "keywords": [
+    "gamenight",
+    "sdk"
+  ],
+  "author": "Dan Bovey <dan@danbovey.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danbovey/GAMENIGHT-sdk/issues"
+  },
+  "homepage": "https://github.com/danbovey/GAMENIGHT-sdk#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
+  }
+}

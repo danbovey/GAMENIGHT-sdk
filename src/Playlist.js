@@ -17,8 +17,6 @@ class Playlist {
         }
 
         this.games.push(game);
-        io.to(`room_${room.code}`)
-            .emit('room/update_playlist', { playlist: room.playlist });
 
         return true;
     }

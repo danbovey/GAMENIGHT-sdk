@@ -1,4 +1,5 @@
 const shortid = require('shortid');
+const slugify = require('slugify');
 
 const Playlist = require('./Playlist');
 const ioHelpers = require('./helpers/io');
@@ -107,7 +108,7 @@ class Room {
             this.broadcast('player_leave', { player });
         }
 
-        return index > -1;
+        return Promise.resolve(index > -1);
     }
 
     /**
@@ -128,7 +129,7 @@ class Room {
      */
     changeHost(player_id) {
         const oldHost = this.players.find(u => u._id.toString() == this.host.toString());
-        const newHost = room.players.find(u => u._id.toString() == player_id.toString());
+        const newHost = this.players.find(u => u._id.toString() == player_id.toString());
         if(newHost == null) {
             return Promsie.reject('Player is not in room');
         }
@@ -148,7 +149,7 @@ class Room {
      * @param {object} settings New settings
      */
     updateSettings(settings) {
-        if(settings.privacy != this.settings.privacy) {
+        if(settings.privacy && settings.privacy != this.settings.privacy) {
             this.code = shortid.generate();
             this.settings.privacy = settings.privacy;
         }
@@ -156,7 +157,7 @@ class Room {
             this.settings.password = settings.password;
         }
         if(settings.player_limit) {
-            this.settings.player_limit = payload.settings.player_limit;
+            this.settings.player_limit = settings.player_limit;
         }
     }
 
@@ -207,9 +208,8 @@ class Room {
     toJSON() {
         // When converting the room to JSON, hide the
         // ID, join password and any active games.
-        const settings = Object.assign({}, this.settings, {
-            password: null
-        });
+        const settings = Object.assign({}, this.settings);
+        delete settings.password;
 
         return {
             name: this.name,

@@ -12,7 +12,7 @@ class Playlist {
      * @param {object} game The game details representing a Game
      */
     add(game) {
-        if(this.games.length == 10) {
+        if(this.games.length === 10) {
             return false;
         }
 
@@ -25,7 +25,7 @@ class Playlist {
         // Go to the next game
         this.index++;
 
-        if(this.index == this.games.length) {
+        if(this.index === this.games.length) {
             return false;
         }
 

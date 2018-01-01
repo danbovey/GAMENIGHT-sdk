@@ -47,11 +47,11 @@ class Room {
      */
     addPlayer(player, socket, password = null) {
         const exists = this.players.find(p => p._id == player._id);
-        if(this.players.length == this.settings.player_limit) {
+        if(this.players.length === this.settings.player_limit) {
             return Promise.reject('Room is full.');
         }
 
-        if(this.settings.privacy == 'private') {
+        if(this.settings.privacy === 'private') {
             if(!password) {
                 return Promise.reject('Room is private. Password required to enter.');
             }
@@ -86,7 +86,7 @@ class Room {
      */
     removePlayer(player, socket) {
         const index = this.players.find(p => p._id == player._id);
-        if(index == -1) {
+        if(index === -1) {
             return Promise.reject('Not in room.');
         }
 
@@ -128,9 +128,9 @@ class Room {
      * @param {string} player_id The UUID of the new host player
      */
     changeHost(player_id) {
-        const oldHost = this.players.find(u => u._id.toString() == this.host.toString());
-        const newHost = this.players.find(u => u._id.toString() == player_id.toString());
-        if(newHost == null) {
+        const oldHost = this.players.find(u => u._id.toString() === this.host.toString());
+        const newHost = this.players.find(u => u._id.toString() === player_id.toString());
+        if(newHost === null) {
             return Promsie.reject('Player is not in room');
         }
 
@@ -153,7 +153,7 @@ class Room {
             this.code = shortid.generate();
             this.settings.privacy = settings.privacy;
         }
-        if(settings.password && this.settings.privacy == 'private') {
+        if(settings.password && this.settings.privacy === 'private') {
             this.settings.password = settings.password;
         }
         if(settings.player_limit) {
@@ -171,7 +171,11 @@ class Room {
         this.broadcast('room/update_playlist', { playlist: this.playlist });
     }
 
-    start() {
+    /**
+     * Start the room's playlist
+     * @param {function} gameLoader GAMENIGHT platform provides a function to load a game.
+     */
+    start(gameLoader) {
         // Start the room's playlist
         const plGame = this.playlist.next();
         if(!plGame) {
@@ -183,16 +187,9 @@ class Room {
             remove: /[$*_+~.()'"!\-:@]/g,
             lower: true
         });
-        const Game = require(`../games/${gameName}/index`);
+        const Game = gameLoader(gameName);
 
-        const filteredRoom = Object.assign({}, room);
-        filteredRoom.players.forEach(p => {
-            delete p.discord;
-            delete p.facebook
-            delete p.google;
-            delete p.twitter;
-        });
-        this.game = new Game(plGame, filteredRoom, this.io);
+        this.game = new Game(plGame, this, this.io);
 
         this.game.init();
 
@@ -202,7 +199,7 @@ class Room {
             }, this.game.settings.resultsTimeout);
         });
 
-        this.broadcast('room/update_playlist', { playlist: room.playlist });
+        this.broadcast('room/update_playlist', { playlist: this.playlist });
     }
 
     toJSON() {

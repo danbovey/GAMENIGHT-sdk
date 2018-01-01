@@ -140,7 +140,7 @@ class Game extends EventEmitter {
             this.room.broadcast('game/player_ready', { player_id });
             
             // If all the players are ready, start the game
-            if(this.players.filter(p => !p.ready).length > 0) {
+            if(this.players.filter(p => !p.ready).length === 0) {
                 this.start();
             }
         }
@@ -265,7 +265,7 @@ class Game extends EventEmitter {
         if(this.endResults) {
             return Promise.reject('Game has ended.');
         }
-        if(this.turn.number == 0) {
+        if(this.turn.number === 0) {
             return Promise.reject('Game has not started.');
         }
         // The move can only be accepted if it's the player's turn

@@ -1,6 +1,6 @@
 {
   "name": "gamenight",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "🕹 SDK for developing games for the GAMENIGHT platform",
   "main": "src/index.js",
   "scripts": {
@@ -23,5 +23,9 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "mocha": "^4.0.1"
+  },
+  "dependencies": {
+    "shortid": "^2.2.8",
+    "slugify": "^1.2.8"
   }
 }

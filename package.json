@@ -1,6 +1,6 @@
 {
   "name": "gamenight",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "🕹 SDK for developing games for the GAMENIGHT platform",
   "main": "src/index.js",
   "scripts": {

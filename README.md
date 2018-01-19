@@ -15,7 +15,7 @@ The `Game` class is extended to create the server-side process that handles game
 - The game decides the order that players get to take their turns.
 - When all players are ready, the game and the first round is started.
     - Each player takes their turn.
-    - After their turn, Check if player has made a winning move.
+    - After their turn, if player has made a winning move, the game ends.
 - The round ends if all players have taken their turn.
     - Check if any win conditions have been met or change player order.
 - The next round is started.
@@ -23,7 +23,7 @@ The `Game` class is extended to create the server-side process that handles game
 
 #### Player Turn Order
 
-The order in which players take their turns can be defined in `setup` or at any point during the game using `setPlayerTurnOrder`. This allows the first round of the game to be set up, for example, as a dice roll where the player who gets to go first is determined by the highest die roll. The player turn order is a sorted array of player IDs.
+The order in which players take their turns can be defined in `setup` or at any point during the game using `setPlayerTurnOrder`. This allows the first round of the game to be set up, for example, as a die roll where the player who gets to go first is determined by the highest die roll. The player turn order is a sorted array of player IDs.
 
 ```js
 this.setPlayerTurnOrder(['player_1', 'player_2']);
@@ -31,20 +31,19 @@ this.setPlayerTurnOrder(['player_1', 'player_2']);
 
 #### Readying up
 
-A game can choose to require all players to say they are ready before starting the game. When readying up, players can send an initial action such as choosing their game token, avatar or nickname or placing their ships in Battleship.
+A game can choose to require all players to say they are ready before starting the game. When readying up, players can send an initial action such as choosing their game token, avatar or nickname, or placing their ships in Battleship.
 
 #### Round
 
-A round is a group of turns made by players. In it's most basic form, a round could be a set of four turns representing the first four turns made by four players in a game of Ludo. A round can be manipulated and changed by the player turn order to achieve game logic like Uno, where the player turn order can be reversed. A round can have metadata attached to it to send to the client. For example, the first round in Monopoly is a `dice_roll`.
+A round is a group of turns made by players. In it's most basic form, a round could be a set of turns representing the first four turns made by four players in a game of Ludo. A round can be manipulated and changed by the player turn order to achieve game logic like Uno, where the order can be reversed. A round can have metadata attached to it to send to the client. For example, the first round in Monopoly is a `die_roll`.
 
 ```js
-this.round = { number: 1, type: 'dice_roll' };
+this.round = { number: 1, type: 'die_roll' };
 ```
-
 
 #### Turn
 
-A turn opens the game up to one player to make their move. After incrementing the turn number, the turn player is determined from the index in player turn order and the `handleMove` function is opened up to that player. A turn can last for a certain timeframe in games like Poker (the game can choose to check or fold for you if you don't move) or stay open until the player makes a decision in games like Chess.
+A turn opens the game up to one player to make their move. After incrementing the turn number, the turn player is determined from the index in player turn order and the `handleMove` function will accept a move payload from only that player. A turn can last for a certain timeframe in games like Poker (the game can choose to check or fold for you if you don't move) or stay open until the player makes a decision in games like Chess.
 
 ```js
 this.turn = { number: 1, player_id: 'player_1' };
